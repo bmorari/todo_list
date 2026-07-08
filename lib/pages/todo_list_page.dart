@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/repositories/todo_repository.dart';
 import 'package:todo_list/widgets/todo_list_item.dart';
-import 'package:todo_list/repositories/todo_repository.dart';
 
 import '../models/todo.dart';
 
@@ -35,7 +34,7 @@ class _TodoListPageState extends State<TodoListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFF8FAFC),
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -51,8 +50,21 @@ class _TodoListPageState extends State<TodoListPage> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Adicione uma tarefa',
-                          hintText: 'Ex: Estudar Flutter',
+                          labelStyle: TextStyle(color: Colors.grey[700]),
+                          floatingLabelStyle: TextStyle(color: Colors.indigo),
                           errorText: errorText,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey[700]!,
+                              width: 2,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.indigo,
+                              width: 2,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -81,12 +93,12 @@ class _TodoListPageState extends State<TodoListPage> {
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        backgroundColor: Colors.blue,
-                        padding: EdgeInsets.all(13),
+                        backgroundColor: Colors.indigo,
+                        padding: EdgeInsets.all(12.7),
                       ),
-                      child: Icon(Icons.add, size: 30),
+                      child: Icon(Icons.add, size: 27, color: Colors.white),
                     ),
                   ],
                 ),
@@ -105,19 +117,20 @@ class _TodoListPageState extends State<TodoListPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        'Você possui ${todos.length} tarefas pendentes',
+                        ' ${todos.length} tarefas pendentes',
+                        style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                       ),
                     ),
                     ElevatedButton(
                       onPressed: showAlertDeleteAllTodos,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        backgroundColor: Colors.blue,
-                        padding: EdgeInsets.all(13),
+                        backgroundColor: const Color.fromARGB(255, 241, 126, 126),
+                        padding: EdgeInsets.all(14),
                       ),
-                      child: Text('Limpar tudo'),
+                      child: Text('Limpar tudo', style: TextStyle(fontSize: 13, color: Colors.white)),
                     ),
                   ],
                 ),
@@ -146,7 +159,7 @@ class _TodoListPageState extends State<TodoListPage> {
           style: TextStyle(color: Colors.black),
         ),
         duration: const Duration(seconds: 5),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[50],
         persist: false,
         action: SnackBarAction(
           textColor: Colors.blue,
