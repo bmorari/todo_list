@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:anotai_app/repositories/todo_repository.dart';
 import 'package:anotai_app/widgets/todo_list_item.dart';
+import 'package:flutter/services.dart';
 
 import '../models/todo.dart';
 
@@ -19,6 +20,8 @@ class _TodoListPageState extends State<TodoListPage> {
   Todo? deletedTodo;
   int? deletedTodoPos;
   String? errorText;
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -44,65 +47,69 @@ class _TodoListPageState extends State<TodoListPage> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  Image.asset('lib/assets/images/anotai.png', width: 380, height: 230),
+                  Image.asset(
+                    'lib/assets/images/anotai.png',
+                    width: 380,
+                    height: 230,
+                  ),
                   Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          controller: todoController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Adicione uma tarefa',
-                            labelStyle: TextStyle(color: Colors.grey[500]),
-                            floatingLabelStyle: TextStyle(color: Colors.indigo),
-                            errorText: errorText,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey[600]!,
-                                width: 2,
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            controller: todoController,
+                            maxLength: 25,
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Digite uma tarefa';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.indigo,
-                                width: 2,
-                              ),
+                              hintText: 'Adicione uma tarefa',
                             ),
                           ),
                         ),
                       ),
                       SizedBox(width: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          String text = todoController.text;
-      
-                          if(text.isEmpty) {
-                            setState(() {
-                              errorText = 'O texto não pode ser vazio!';
-                            });
-                            return;
-                          }
-      
-                          setState(() {
-                            Todo newTodo = Todo(
-                              title: text,
-                              dateTime: DateTime.now(),
-                            );
-                            todos.add(newTodo);
-                            errorText = null;
-                          });
-                          todoController.clear();
-                          todoRepository.saveTodoList(todos);
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  todos.add(
+                                    Todo(
+                                      title: todoController.text.trim(),
+                                      dateTime: DateTime.now(),
+                                    ),
+                                  );
+                                });
+                                todoController.clear();
+                              }
+                              todoRepository.saveTodoList(todos);
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              backgroundColor: Colors.indigo,
+                              padding: EdgeInsets.all(12.7),
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              size: 27,
+                              color: Colors.white,
+                            ),
                           ),
-                          backgroundColor: Colors.indigo,
-                          padding: EdgeInsets.all(12.7),
-                        ),
-                        child: Icon(Icons.add, size: 27, color: Colors.white),
+                          SizedBox(height: 21),
+                        ],
                       ),
                     ],
                   ),
@@ -122,7 +129,10 @@ class _TodoListPageState extends State<TodoListPage> {
                       Expanded(
                         child: Text(
                           ' ${todos.length} tarefas pendentes',
-                          style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[700],
+                          ),
                         ),
                       ),
                       ElevatedButton(
@@ -131,10 +141,18 @@ class _TodoListPageState extends State<TodoListPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          backgroundColor: const Color.fromARGB(255, 241, 126, 126),
+                          backgroundColor: const Color.fromARGB(
+                            255,
+                            241,
+                            126,
+                            126,
+                          ),
                           padding: EdgeInsets.all(14),
                         ),
-                        child: Text('Limpar tudo', style: TextStyle(fontSize: 13, color: Colors.white)),
+                        child: Text(
+                          'Limpar tudo',
+                          style: TextStyle(fontSize: 13, color: Colors.white),
+                        ),
                       ),
                     ],
                   ),
@@ -192,7 +210,7 @@ class _TodoListPageState extends State<TodoListPage> {
             child: Text('Cancelar', style: TextStyle(color: Colors.blue)),
           ),
           TextButton(
-            onPressed: deleteAllItens ,
+            onPressed: deleteAllItens,
             child: Text('Deletar', style: TextStyle(color: Colors.red)),
           ),
         ],
