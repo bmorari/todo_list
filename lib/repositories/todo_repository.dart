@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todo_list/models/todo.dart';
+import 'package:anotai_app/models/todo.dart';
 
 final todoListKey = 'todo_list';
 

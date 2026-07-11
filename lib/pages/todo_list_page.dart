@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/repositories/todo_repository.dart';
-import 'package:todo_list/widgets/todo_list_item.dart';
+import 'package:anotai_app/repositories/todo_repository.dart';
+import 'package:anotai_app/widgets/todo_list_item.dart';
 
 import '../models/todo.dart';
 
