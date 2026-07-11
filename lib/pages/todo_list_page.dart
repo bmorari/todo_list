@@ -43,8 +43,8 @@ class _TodoListPageState extends State<TodoListPage> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
+                  Image.asset('lib/assets/images/anotai.png', width: 380, height: 230),
                   Row(
                     children: [
                       Expanded(
@@ -164,7 +164,7 @@ class _TodoListPageState extends State<TodoListPage> {
           style: TextStyle(color: Colors.black),
         ),
         duration: const Duration(seconds: 5),
-        backgroundColor: Colors.grey[50],
+        backgroundColor: Color(0xFFF8FAFC),
         persist: false,
         action: SnackBarAction(
           textColor: Colors.blue,
